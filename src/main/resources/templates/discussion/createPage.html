@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>discussion create page</title>
+</head>
+<body>
+
+<form th:method="POST" th:action="@{/kostApp/discussion/create}" th:object="${discussion}">
+    <label for="name">Enter name of your discussion:</label>
+    <input type="text" th:field="*{name}" id="name">
+    <div style="color: red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+    <br>
+    <input type="submit" value="add">
+</form>
+
+</body>
+</html>

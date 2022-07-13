@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>userPage</title>
+</head>
+<body>
+
+
+<p th:text="${user.getNik()}"></p>
+<p th:text="${user.getName()}"></p>
+<p th:text="${user.getSurname()}"></p>
+<p th:text="${user.getAge()}"></p>
+<p th:text="${user.getEmail()}"></p>
+<br>
+<a th:href="@{/kostApp/user/editUser/{id}(id=${user.getId()})}">edit</a>
+<br>
+<form th:method="DELETE" th:action="@{/kostApp/user/delete/{id}(id = ${user.getId()})}" th:object="${user}">
+    <input type="submit" value="delete my account">
+</form>
+<br>
+<a href="/kostApp/welcome">Return back</a>
+</div>
+
+</body>
+</html>
