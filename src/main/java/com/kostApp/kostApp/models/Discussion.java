@@ -14,6 +14,9 @@ public class Discussion {
     @Column(name = "id")
     private int id;
 
+    @Column(name = "user_id", insertable = false, updatable = false)
+    private int userId;
+
     @Column(name = "name")
     private String name;
 
@@ -28,8 +31,9 @@ public class Discussion {
         this.name = name;
     }
 
-    public Discussion(String name, User user) {
+    public Discussion(String name,int userId , User user) {
         this.name = name;
+        this.userId = userId;
         this.user = user;
     }
 
@@ -57,10 +61,19 @@ public class Discussion {
         this.user = user;
     }
 
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
     @Override
     public String toString() {
         return "Discussion{" +
                 "id=" + id +
+                ", userId=" + userId +
                 ", name='" + name + '\'' +
                 ", user=" + user +
                 '}';

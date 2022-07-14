@@ -1,6 +1,7 @@
 package com.kostApp.kostApp.models;
 
 import org.hibernate.annotations.GeneratorType;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.*;
@@ -10,6 +11,8 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 public class User {
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
