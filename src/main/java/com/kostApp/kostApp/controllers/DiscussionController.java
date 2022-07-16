@@ -54,7 +54,7 @@ public class DiscussionController {
         final String currentUserNik = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.showUserByNik(currentUserNik);
 
-        String nameOfDiscussion = discussion.getName();
+        String nameOfDiscussion = discussion.getName().replace(" ","_");
         String nameOfTable = nameOfDiscussion + "_messages";
 
         model.addAttribute("message", new Message());

@@ -18,6 +18,22 @@ public class MessageService {
     private JdbcTemplate jdbcTemplate;
 
     public void saveMessage(String message, String nameOfTable, int discussionId){
+//  logic for long message witch insert '\n' behind word when row is longer then 30 char
+        if(message.length() > 30) {
+            int counter = 0;
+            char [] chars = message.toCharArray();
+            for (char c : chars){
+
+                counter++;
+                if(counter > 30 && c == ' '){
+                    c = '\n';
+                    counter = 0;
+                }
+
+            }
+            message = new String(chars);
+        }
+
         jdbcTemplate.update("INSERT INTO " + nameOfTable +
                 "(discussion_id, message, created_at) values (?,?,?)",
                 discussionId,

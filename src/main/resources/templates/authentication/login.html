@@ -21,7 +21,9 @@
     </div>
 </form>
 <br>
-<a href="/authentication/registration">register</a>
+<form th:method="GET" th:action="@{/authentication/registration}">
+    <input type="submit" value="register"/>
+</form>
 
 </body>
 </html>

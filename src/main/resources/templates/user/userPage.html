@@ -13,14 +13,17 @@
 <p th:text="${user.getAge()}"></p>
 <p th:text="${user.getEmail()}"></p>
 <br>
-<a th:href="@{/kostApp/user/editUser/{id}(id=${user.getId()})}">edit</a>
+<form th:method="GET" th:action="@{/kostApp/user/editUser/{id}(id=${user.getId()})}">
+    <input type="submit" value="edit">
+</form>
 <br>
 <form th:method="DELETE" th:action="@{/kostApp/user/delete/{id}(id = ${user.getId()})}" th:object="${user}">
     <input type="submit" value="delete my account">
 </form>
 <br>
-<a href="/kostApp/welcome">Return back</a>
-</div>
+<form th:method="GET" th:action="@{/kostApp/welcome}">
+    <input type="submit" value="Return back"/>
+</form>
 
 </body>
 </html>

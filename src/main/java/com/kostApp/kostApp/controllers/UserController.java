@@ -6,7 +6,12 @@ import com.kostApp.kostApp.models.User;
 import com.kostApp.kostApp.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.server.Session;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +19,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Controller
 @RequestMapping("/kostApp/user")
@@ -72,6 +80,10 @@ public class UserController {
         }else {
             throw new RuntimeException("you can`t edit data another user");
         }
+
+//  for reload user nikname and password in SecurityContextHolder
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userDTO.getNik(), userDTO.getPassword());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
         return "redirect:/kostApp/user/userPage/{id}";
     }

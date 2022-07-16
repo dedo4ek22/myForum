@@ -21,7 +21,7 @@ public class MessageController {
                                @ModelAttribute("message")Message message){
 
         String mes = message.getMessage();
-        String nameOfTable = discName + "_messages";
+        String nameOfTable = discName.replace(" ","_") + "_messages";
 
         messageService.saveMessage(mes, nameOfTable, discId);
 
