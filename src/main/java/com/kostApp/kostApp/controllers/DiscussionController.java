@@ -14,6 +14,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/kostApp/discussion")
 public class DiscussionController {
@@ -57,6 +59,8 @@ public class DiscussionController {
         String nameOfDiscussion = discussion.getName().replace(" ","_");
         String nameOfTable = nameOfDiscussion + "_messages";
 
+        model.addAttribute("userService", userService);
+        model.addAttribute("users", userService.userList());
         model.addAttribute("message", new Message());
         model.addAttribute("discussion", discussion);
         model.addAttribute("user", user);

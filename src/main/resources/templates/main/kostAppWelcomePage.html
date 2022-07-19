@@ -5,7 +5,7 @@
     <title>welcome page</title>
 </head>
 <body>
-<h2>Hi, it`s my cold app with blackjack and hookers</h2>
+<h2><p th:text="'Hi, ' + ${user.getNik()} + ', it`s my cold app with blackjack and hookers'"></p></h2>
 <br>
 <form th:method="GET" th:action="@{/kostApp/user/userPage/{id}(id = ${user.getId()})}">
     <input type="submit" value="show my data"/>
@@ -30,10 +30,8 @@
 <br>
 <br>
 <div th:each="discussion : ${discussions}">
-    <form th:method="GET" th:action="@{/kostApp/discussion/discussionPage/{id}(id = ${discussion.getId()})}">
-        <input type="submit" th:value="${discussion.getName()}"/>
-    </form>
-    <br>
+   <p th:text="${userService.showUserById(discussion.getUserId()).getNik()} + ' :'"></p>
+    <a  th:href="@{/kostApp/discussion/discussionPage/{id}(id = ${discussion.getId()})}"><p th:text="${discussion.getName()}"></p></a>
 </div>
 </body>
 </html>

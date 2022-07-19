@@ -1,5 +1,7 @@
 package com.kostApp.kostApp.models;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Message {
@@ -11,6 +13,8 @@ public class Message {
     private String message;
 
     private Date createdAt;
+
+    private int userId;
 
     public Message() {
     }
@@ -43,6 +47,24 @@ public class Message {
         return createdAt;
     }
 
+    public String getCreatedAtStringFormat() {
+        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy hh:mm:ss");
+        return sdf.format(createdAt);
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
     @Override
     public String toString() {
         return "Message{" +
@@ -53,7 +75,5 @@ public class Message {
                 '}';
     }
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
+
 }

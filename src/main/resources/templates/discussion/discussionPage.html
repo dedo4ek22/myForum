@@ -26,7 +26,12 @@ here will be soon
 <br>
 <br>
 <div th:each="message : ${messages}">
-    <p th:text="${message.getMessage()}"></p>
+    <p th:text="${userService.showUserById(message.getUserId()).getNik()} +  ' - sent at : ' + ${message.getCreatedAtStringFormat()} + ' : ' + ${message.getMessage()}"></p>
+    <form th:method="GET" th:action="@{/kostApp/Discussion/message/delete/{id}(id = ${discussion.getId()})}" th:if="${user.getId() == (message.getUserId())}">
+        <input type="submit" value="delete my message">
+        <input type="hidden" th:value="${discussion.getName()}" name="discName">
+        <input type="hidden" th:value="${message.getId()}" name="messageId">
+    </form>
 </div>
 
 </body>

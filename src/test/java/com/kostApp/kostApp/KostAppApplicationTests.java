@@ -8,6 +8,7 @@ class KostAppApplicationTests {
 
 	@Test
 	void contextLoads() {
+		
 	}
 
 }

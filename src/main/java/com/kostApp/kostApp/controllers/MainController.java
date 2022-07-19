@@ -23,6 +23,8 @@ public class MainController {
 
         final String currentUserNik = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.showUserByNik(currentUserNik);
+
+        model.addAttribute("userService", userService);
         model.addAttribute("user", user);
         model.addAttribute("discussions", discussionService.getAllDiscussions());
         return "/main/kostAppWelcomePage";

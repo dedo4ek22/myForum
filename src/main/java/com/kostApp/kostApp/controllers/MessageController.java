@@ -33,4 +33,16 @@ public class MessageController {
 
         return "redirect:/kostApp/discussion/discussionPage/{id}";
     }
+
+    @GetMapping("/delete/{id}")
+    private String deleteMessage(@PathVariable("id") int id,
+                                 @ModelAttribute("discName")String discName,
+                                 @ModelAttribute("messageId") int messageId){
+
+        String nameOfTable = discName.replace(" ","_") + "_messages";
+
+        messageService.deleteMessageForId(messageId, nameOfTable);
+
+        return "redirect:/kostApp/discussion/discussionPage/{id}";
+    }
 }
