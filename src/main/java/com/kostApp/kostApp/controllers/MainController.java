@@ -9,6 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * controller of main page
+ */
 @Controller
 @RequestMapping("/kostApp")
 public class MainController {
@@ -18,9 +21,15 @@ public class MainController {
     @Autowired
     private DiscussionService discussionService;
 
+    /**
+     *
+     * @param model - model for add attribute to view
+     * @return welcome page
+     */
     @GetMapping("/welcome")
     private String kostAppWelcomePage(Model model) {
 
+//        take user nik from session and find user by it
         final String currentUserNik = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.showUserByNik(currentUserNik);
 

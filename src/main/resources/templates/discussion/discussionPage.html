@@ -20,14 +20,13 @@ here will be soon
     <input type="text" th:field="*{message}" id="mes"/>
     <br>
     <input type="hidden" th:value="${discussion.getName()}" name="discName">
-    <input type="hidden" th:value="${discussion.getId}" name="discId">
     <input type="submit" value="sent">
 </form>
 <br>
 <br>
 <div th:each="message : ${messages}">
     <p th:text="${userService.showUserById(message.getUserId()).getNik()} +  ' - sent at : ' + ${message.getCreatedAtStringFormat()} + ' : ' + ${message.getMessage()}"></p>
-    <form th:method="GET" th:action="@{/kostApp/Discussion/message/delete/{id}(id = ${discussion.getId()})}" th:if="${user.getId() == (message.getUserId())}">
+    <form th:method="DELETE" th:action="@{/kostApp/Discussion/message/delete/{id}(id = ${discussion.getId()})}" th:if="${user.getId() == (message.getUserId())}">
         <input type="submit" value="delete my message">
         <input type="hidden" th:value="${discussion.getName()}" name="discName">
         <input type="hidden" th:value="${message.getId()}" name="messageId">

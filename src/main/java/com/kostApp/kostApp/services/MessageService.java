@@ -1,20 +1,19 @@
 package com.kostApp.kostApp.services;
 
+import com.kostApp.kostApp.DAO.MessageDAO;
 import com.kostApp.kostApp.models.Message;
 import com.kostApp.kostApp.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import javax.swing.plaf.PanelUI;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.Format;
-import java.text.SimpleDateFormat;
+
 import java.util.List;
 
+/**
+ * service class for discussion
+ */
 @Service
 public class MessageService {
 
@@ -24,70 +23,106 @@ public class MessageService {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    @Autowired
+    private MessageDAO messageDAO;
+
+    /**
+     * method for save message
+     *
+     * @param message - storage text of message and give it to messageDAO
+     * @param nameOfTable - storage name of table and give it to messageDAO
+     * @param discussionId - storage discussion id and give it to messageDAO
+     */
     public void saveMessage(String message, String nameOfTable, int discussionId){
 
+//        add line break in long message
        message = addLineBreak(message);
 
+       messageDAO.saveMessage(message, nameOfTable, discussionId);
+
+    }
+
+    /**
+     * method for take all messages from database
+     *
+     * @param nameOfTable - storage name of table and give it to messageDAO
+     * @return - list of message
+     */
+    public List<Message> getMessageList(String nameOfTable){
+
+       return messageDAO.getMessageList(nameOfTable);
+
+    }
+
+    /**
+     * method for delete message from database
+     *
+     * @param id - storage message id
+     * @param nameOfTable - storage name of table
+     */
+    public void deleteMessageForId(int id, String nameOfTable){
+
+//        take user nik from session
         final String curentUserNik = SecurityContextHolder.getContext().getAuthentication().getName();
+
+//        take user from database by nikname
         User user = userService.showUserByNik(curentUserNik);
 
-        jdbcTemplate.update("INSERT INTO " + nameOfTable +
-                "(discussion_id, message, created_at, user_id) values (?,?,?,?)",
-                discussionId,
-                message,
-                getCurrentTimeStamp(),
-                user.getId());
-    }
+//        take message from database by id
+        Message message = getMessageForId(id, nameOfTable);
 
-    public List<Message> messageList (String nameOfTable){
-       return jdbcTemplate.query("SELECT * FROM " + nameOfTable + " ORDER BY created_at DESC ", new MessageMapper());
-    }
-
-    public void deleteMessageForId(int id, String nameOfTable){
-        jdbcTemplate.update("DELETE FROM " + nameOfTable + " WHERE id = ?" ,
-                id);
-    }
-
-    private static java.sql.Timestamp getCurrentTimeStamp() {
-
-        java.util.Date today = new java.util.Date();
-        return new java.sql.Timestamp(today.getTime());
+//        check if user id equals foreign key user in message (only user, who create message can delete it)
+        if(user.getId() == message.getUserId()) {
+            messageDAO.deleteMessageById(id, nameOfTable);
+        }
 
     }
-    //  logic for long message witch insert '\n' behind word when row is longer then 30 char
+
+    /**
+     * method for get message by id
+     *
+     * @param id - storage message id
+     * @param nameOfTable - storage name of table
+     * @return - message
+     */
+    public Message getMessageForId(int id, String nameOfTable){
+
+       return messageDAO.getMessageById(id, nameOfTable);
+
+    }
+
+    /**
+     * method for and line break in message. logic witch insert '\n' behind word when row is longer then 30 char
+     *
+     * @param message - storage message
+     * @return - message with line break
+     */
     private String addLineBreak(String message){
+
+//        check if message longer then 30 chars
         if(message.length() > 30) {
+
             int counter = 0;
             char [] chars = message.toCharArray();
             StringBuilder stringBuilder = new StringBuilder();
+
+//                increase counter for 1 on each char, when it became more than 30 and pointer between word add \n in chars
             for (char c : chars){
 
                 counter++;
+
                 if(counter > 30 && c == ' '){
                     c = '\n';
                     counter = 0;
                 }
+//                add chars in string builder
                 stringBuilder.append(c);
             }
+//            rewrite message on new one with line break
             message = new String(stringBuilder);
+
         }
         return message;
     }
 
-    class MessageMapper implements RowMapper<Message>{
-
-        @Override
-        public Message mapRow(ResultSet rs, int rowNum) throws SQLException {
-            Message message = new Message();
-
-            message.setId(rs.getInt("id"));
-            message.setDiscussionId(rs.getInt("discussion_id"));
-            message.setMessage(rs.getString("message"));
-            message.setCreatedAt(rs.getTimestamp("created_at"));
-            message.setUserId(rs.getInt("user_id"));
-
-
-            return message;
-        }
-    }
 }

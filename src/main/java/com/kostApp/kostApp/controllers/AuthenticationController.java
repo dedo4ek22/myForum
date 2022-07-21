@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
 
+/**
+ * controller for authentication
+ */
 @Controller
 @RequestMapping("/authentication")
 public class AuthenticationController {
@@ -20,24 +23,42 @@ public class AuthenticationController {
     @Autowired
     private RegistrationService registrationService;
 
+    /**
+     *
+     * @return login page
+     */
     @GetMapping("/login")
     private String login(){
         return "/authentication/login";
     }
 
+    /**
+     *
+     * @param user - give new user in view
+     * @return registration page
+     */
     @GetMapping("/registration")
     private String registration(@ModelAttribute("user") User user){
         return "authentication/registration";
     }
 
+    /**
+     * controller method post for register new user
+     *
+     * @param user - user from view
+     * @param result - bindingresult for catch error in user fields
+     * @return login page
+     */
     @PostMapping("/registration")
     private String registrationProcess(@ModelAttribute("user") @Valid User user,
                                        BindingResult result){
 
+//        check for error in user field
         if(result.hasErrors()){
             return "authentication/registration";
         }
 
+//        save user in database
         registrationService.save(user);
 
         return "redirect:/authentication/login";

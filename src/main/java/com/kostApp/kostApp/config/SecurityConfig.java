@@ -10,12 +10,20 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+/**
+ * security configuration
+ */
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserDetailService userDetailService;
 
+    /**
+     * method for configure login, registration, authorities, logout etc
+     *
+     * @param httpSecurity
+     */
     public void configure(HttpSecurity httpSecurity){
         try {
 
@@ -37,6 +45,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         }
     }
 
+    /**
+     * config of encode password
+     *
+     * @param builder
+     */
     public void configure(AuthenticationManagerBuilder builder){
 
         try {
