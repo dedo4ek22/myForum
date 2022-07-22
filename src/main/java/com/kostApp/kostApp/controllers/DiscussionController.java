@@ -9,10 +9,17 @@ import com.kostApp.kostApp.services.MessageService;
 import com.kostApp.kostApp.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * controller for discussion
@@ -69,7 +76,10 @@ public class DiscussionController {
      * @return page of current discussion
      */
     @GetMapping("/discussionPage/{id}")
-    private String discussionPage(@PathVariable("id")int id, Model model){
+    private String discussionPage(@PathVariable("id")int id,
+                                  Model model,
+                                  @RequestParam("page")Optional<Integer> page,
+                                  @RequestParam("size")Optional<Integer> size){
 
 //        take discussion from database
         Discussion discussion = discussionService.getDiscussionById(id);
@@ -81,12 +91,26 @@ public class DiscussionController {
 //        generate name for message table
         String nameOfTable = discussion.getName().replace(" ","_") + "_messages";
 
+        int currantPage = page.orElse(1);
+        int pageSize = size.orElse(5);
+
+        Page<Message> messagePage =
+                messageService.getMessageList(nameOfTable, PageRequest.of(currantPage - 1, pageSize));
+
+        int totalPage = messagePage.getTotalPages();
+
         model.addAttribute("userService", userService);
         model.addAttribute("users", userService.userList());
         model.addAttribute("message", new Message());
         model.addAttribute("discussion", discussion);
         model.addAttribute("user", user);
-        model.addAttribute("messages", messageService.getMessageList(nameOfTable));
+        model.addAttribute("messagePage", messagePage);
+        if(totalPage > 0){
+            List<Integer> pageNumbers = IntStream.range(1, totalPage)
+                    .boxed()
+                    .collect(Collectors.toList());
+            model.addAttribute("pageNumbers", pageNumbers);
+        }
 
         return "/discussion/discussionPage";
     }

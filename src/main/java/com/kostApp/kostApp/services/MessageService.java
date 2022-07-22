@@ -4,11 +4,16 @@ import com.kostApp.kostApp.DAO.MessageDAO;
 import com.kostApp.kostApp.models.Message;
 import com.kostApp.kostApp.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -19,9 +24,6 @@ public class MessageService {
 
     @Autowired
     UserService userService;
-
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
 
     @Autowired
     private MessageDAO messageDAO;
@@ -48,10 +50,27 @@ public class MessageService {
      * @param nameOfTable - storage name of table and give it to messageDAO
      * @return - list of message
      */
-    public List<Message> getMessageList(String nameOfTable){
+    public Page<Message> getMessageList(String nameOfTable, Pageable pageable){
 
-       return messageDAO.getMessageList(nameOfTable);
+       List<Message> messages = messageDAO.getMessageList(nameOfTable);
 
+       int pageSize = pageable.getPageSize();
+       int currentPage = pageable.getPageNumber();
+       int startItem = currentPage * pageSize;
+
+       List<Message> list;
+
+       if(messages.size() < startItem){
+           list = Collections.emptyList();
+       } else {
+           int toIndex = Math.min(startItem + pageSize, messages.size());
+           list = messages.subList(startItem, toIndex);
+       }
+
+       Page<Message> messagePage =
+               new PageImpl<Message>(list, PageRequest.of(currentPage, pageSize), messages.size());
+
+       return messagePage;
     }
 
     /**
