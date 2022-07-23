@@ -2,8 +2,6 @@ package com.kostApp.kostApp.DTO;
 
 import com.kostApp.kostApp.models.User;
 
-import javax.persistence.*;
-
 public class DiscussionDTO {
 
     private int id;

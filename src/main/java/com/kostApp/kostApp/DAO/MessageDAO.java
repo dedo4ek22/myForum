@@ -2,7 +2,6 @@ package com.kostApp.kostApp.DAO;
 
 import com.kostApp.kostApp.models.Message;
 import com.kostApp.kostApp.models.User;
-import com.kostApp.kostApp.services.MessageService;
 import com.kostApp.kostApp.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;

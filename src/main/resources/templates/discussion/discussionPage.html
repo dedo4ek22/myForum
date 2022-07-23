@@ -5,7 +5,7 @@
     <title>discussion page</title>
 </head>
 <body>
-here will be soon
+
 <p th:text="${discussion.getName()}"></p>
 <br>
 <form th:method="DELETE" th:action="@{/kostApp/discussion/delete/{id}(id = ${discussion.getId()})}" th:if="${discussion.getUserId().equals(user.getId())}">

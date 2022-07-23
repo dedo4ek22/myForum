@@ -1,9 +1,5 @@
 package com.kostApp.kostApp.models;
 
-import org.hibernate.annotations.GeneratorType;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Service;
-
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.util.List;

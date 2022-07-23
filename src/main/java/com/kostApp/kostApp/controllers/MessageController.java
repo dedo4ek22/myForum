@@ -1,6 +1,5 @@
 package com.kostApp.kostApp.controllers;
 
-import com.kostApp.kostApp.models.Discussion;
 import com.kostApp.kostApp.models.Message;
 import com.kostApp.kostApp.services.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;

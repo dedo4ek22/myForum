@@ -1,8 +1,5 @@
 package com.kostApp.kostApp.models;
 
-
-import org.hibernate.annotations.GeneratorType;
-
 import javax.persistence.*;
 
 @Entity

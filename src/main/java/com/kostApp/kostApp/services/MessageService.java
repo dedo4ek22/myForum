@@ -8,7 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -45,21 +44,26 @@ public class MessageService {
     }
 
     /**
-     * method for take all messages from database
+     * method for take all messages from database on page
      *
      * @param nameOfTable - storage name of table and give it to messageDAO
+     * @param pageable - for work with page
      * @return - list of message
      */
     public Page<Message> getMessageList(String nameOfTable, Pageable pageable){
 
+//        take list of messages from database
        List<Message> messages = messageDAO.getMessageList(nameOfTable);
 
+//        parameter for page
        int pageSize = pageable.getPageSize();
        int currentPage = pageable.getPageNumber();
        int startItem = currentPage * pageSize;
 
        List<Message> list;
 
+//        return empty list if start item is higher then index of last element in messageList
+//        or else return list with element from start item to last element on page
        if(messages.size() < startItem){
            list = Collections.emptyList();
        } else {
@@ -67,6 +71,7 @@ public class MessageService {
            list = messages.subList(startItem, toIndex);
        }
 
+//        create page
        Page<Message> messagePage =
                new PageImpl<Message>(list, PageRequest.of(currentPage, pageSize), messages.size());
 
