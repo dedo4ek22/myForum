@@ -89,6 +89,21 @@ public class MessageDAO {
     }
 
     /**
+     * method for edit message
+     *
+     * @param id - storage message id
+     * @param message - storage message object
+     * @param nameOfTable - storage name of table
+     */
+    public void editMessage(int id, Message message, String nameOfTable){
+
+        jdbcTemplate.update("UPDATE " + nameOfTable + " SET message = ? WHERE id = ?" ,
+                message.getMessage(),
+                id);
+
+    }
+
+    /**
      * method for return time, when message was send
      *
      * @return - timestamp with time of send

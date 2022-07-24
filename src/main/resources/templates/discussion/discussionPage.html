@@ -26,16 +26,23 @@
 <br>
 <table border="1">
     <tbody>
-    <tr th:each="message, iStat : ${messagePage.content}"
+    <div th:each="message, iStat : ${messagePage.content}"
         th:style="${iStat.odd}? 'font-weight: bold;'"
         th:alt-title="${iStat.even}? 'even' : 'odd'">
-        <td th:text="${userService.showUserById(message.getUserId()).getNik()} +  ' - sent at : ' + ${message.getCreatedAtStringFormat()} + ' : ' + ${message.getMessage()}" />
-        <form th:method="DELETE" th:action="@{/kostApp/Discussion/message/delete/{id}(id = ${discussion.getId()})}" th:if="${user.getId() == (message.getUserId())}">-->
+        <t th:text="${userService.showUserById(message.getUserId()).getNik()} +  ' - sent at : ' + ${message.getCreatedAtStringFormat()} + ' : ' + ${message.getMessage()}" />
+        <form th:method="DELETE" th:action="@{/kostApp/Discussion/message/delete/{id}(id = ${discussion.getId()})}" th:if="${user.getId() == (message.getUserId())}">
                     <input type="submit" value="delete my message">
                     <input type="hidden" th:value="${discussion.getName()}" name="discName">
                     <input type="hidden" th:value="${message.getId()}" name="messageId">
                 </form>
-    </tr>
+        <form th:method="POST" th:action="@{/kostApp/Discussion/message/edit/{id}(id = ${discussion.getId()}, size=${messagePage.size}, page=${messagePage.number + 1})}" th:object="${message}" th:if="${user.getId() == (message.getUserId())}">
+            <label for="messageForEdit">edit my message:</label>
+            <input type="text" th:field="*{message}" id="messageForEdit">
+            <input type="submit" value="edit">
+            <input type="hidden" th:value="${discussion.getName()}" name="discName">
+            <input type="hidden" th:value="${message.getId()}" name="messageId">
+        </form>
+    </div>
     </tbody>
 </table>
 <div th:if="${messagePage.totalPages > 0}" class="pagination"

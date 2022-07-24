@@ -116,6 +116,31 @@ public class MessageService {
     }
 
     /**
+     * method for edit message
+     *
+     * @param id - storage message id
+     * @param messageText - storage message object
+     * @param nameOfTable - storage name of table
+     */
+    public void editMessage(int id, Message messageText, String nameOfTable){
+
+//        take user nik from session
+        final String curentUserNik = SecurityContextHolder.getContext().getAuthentication().getName();
+
+//        take user from database by nikname
+        User user = userService.showUserByNik(curentUserNik);
+
+//        take message from database by id
+        Message message = getMessageForId(id, nameOfTable);
+
+//        check if user id equals foreign key user in message (only user, who create message can edit it)
+        if(user.getId() == message.getUserId()) {
+            messageDAO.editMessage(id, messageText, nameOfTable);
+        }
+
+    }
+
+    /**
      * method for and line break in message. logic witch insert '\n' behind word when row is longer then 30 char
      *
      * @param message - storage message

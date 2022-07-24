@@ -4,7 +4,10 @@ import com.kostApp.kostApp.models.Message;
 import com.kostApp.kostApp.services.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 /**
  * controller for message
@@ -60,5 +63,35 @@ public class MessageController {
         messageService.deleteMessageForId(messageId, nameOfTable);
 
         return "redirect:/kostApp/discussion/discussionPage/{id}";
+    }
+
+    /**
+     * POST method for edit message
+     *
+     * @param id - id of discussion
+     * @param discName - name of discussion
+     * @param messageId - message id
+     * @param message - message
+     * @param optionalPage - number of page
+     * @param optionalSize - size of page
+     * @return discussion page
+     */
+    @PostMapping("/edit/{id}")
+    private String editMessagePage(@PathVariable("id") int id,
+                                   @ModelAttribute("discName")String discName,
+                                   @ModelAttribute("messageId") int messageId,
+                                   @ModelAttribute("message")Message message,
+                                   @RequestParam("page") Optional<Integer> optionalPage,
+                                   @RequestParam("size")Optional<Integer> optionalSize){
+
+//        set size and page from requestParam end sent it tu URL for return page where massage was edit
+        int page = optionalPage.orElse(1);
+        int size = optionalSize.orElse(15);
+//        generate name of table
+        String nameOfTable = discName.replace(" ","_") + "_messages";
+
+        messageService.editMessage(messageId, message, nameOfTable);
+
+        return "redirect:/kostApp/discussion/discussionPage/{id}?size=" + size +"&page=" + page;
     }
 }
